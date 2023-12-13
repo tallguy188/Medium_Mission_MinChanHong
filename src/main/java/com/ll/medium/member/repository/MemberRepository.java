@@ -1,7 +1,7 @@
-package com.ll.medium.Member.repository;
+package com.ll.medium.member.repository;
 
 
-import com.ll.medium.Member.entity.Member;
+import com.ll.medium.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

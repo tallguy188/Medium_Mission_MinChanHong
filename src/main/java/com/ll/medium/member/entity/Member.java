@@ -1,4 +1,4 @@
-package com.ll.medium.Member.entity;
+package com.ll.medium.member.entity;
 
 
 import jakarta.persistence.*;
@@ -16,10 +16,12 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id", nullable = false)
     Long id;
 
     @Column(unique = true)
     String username;
 
+    @Column
     String password;
 }

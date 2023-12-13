@@ -1,9 +1,9 @@
-package com.ll.medium.Member.service;
+package com.ll.medium.member.service;
 
 
-import com.ll.medium.Member.entity.Member;
-import com.ll.medium.Member.entity.MemberRole;
-import com.ll.medium.Member.repository.MemberRepository;
+import com.ll.medium.member.entity.Member;
+import com.ll.medium.member.entity.MemberRole;
+import com.ll.medium.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

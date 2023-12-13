@@ -1,4 +1,4 @@
-package com.ll.medium.Member.entity;
+package com.ll.medium.member.entity;
 
 import lombok.Getter;
 

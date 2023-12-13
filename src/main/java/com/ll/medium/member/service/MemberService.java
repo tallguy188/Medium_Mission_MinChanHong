@@ -1,9 +1,9 @@
-package com.ll.medium.Member.service;
+package com.ll.medium.member.service;
 
 
-import com.ll.medium.Member.entity.Member;
-import com.ll.medium.Member.entity.MemberForm;
-import com.ll.medium.Member.repository.MemberRepository;
+import com.ll.medium.member.entity.Member;
+import com.ll.medium.member.entity.MemberForm;
+import com.ll.medium.member.repository.MemberRepository;
 import com.ll.medium.global.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

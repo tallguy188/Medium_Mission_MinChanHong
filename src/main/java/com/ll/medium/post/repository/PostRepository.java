@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
 
-    Optional<Post> getArticleById(Integer id);
+    Optional<Post> getPostById(Integer id);
 
     List<Post> findAllByWriter(Member writer);
 

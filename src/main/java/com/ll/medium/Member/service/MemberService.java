@@ -6,6 +6,7 @@ import com.ll.medium.Member.entity.MemberForm;
 import com.ll.medium.Member.repository.MemberRepository;
 import com.ll.medium.global.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
+    private final PasswordEncoder passwordEncoder;
     public void joinMember(MemberForm memberForm) {
         Member member = memberRepository.save(
                 Member.builder()
                         .username(memberForm.getUsername())
-                        .password(memberForm.getPassword())
+                        .password(passwordEncoder.encode(memberForm.getPassword()))
                         .build());
     }
 

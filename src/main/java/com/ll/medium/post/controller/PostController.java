@@ -1,13 +1,43 @@
 package com.ll.medium.post.controller;
 
 
+import com.ll.medium.member.entity.Member;
+import com.ll.medium.member.service.MemberService;
+import com.ll.medium.post.entity.PostForm;
 import com.ll.medium.post.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
+    private final MemberService memberService;
+    // 글 작성
+    @GetMapping("/write")
+    public String createPost(PostForm postForm) {
+        return "post_form";
+    }
+
+    @PostMapping("/write")
+    public String createPost(@Valid PostForm postForm, BindingResult bindingResult, Principal principal) {
+        if(bindingResult.hasErrors()) {
+            return "article_form";
+        }
+        // findMemberByUsername에서 이미 null을 잡아냄
+        Member optionalMember = memberService.findMemberByUsername(principal.getName());
+        postForm.setWriter(optionalMember);
+        postService.create(postForm);
+        return "redirect:/post/list";
+    }
 }

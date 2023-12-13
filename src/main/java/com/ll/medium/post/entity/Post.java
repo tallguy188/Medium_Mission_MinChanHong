@@ -25,6 +25,9 @@ public class Post {
     @Column
     private String content;
 
+    @Column
+    private boolean isPublished;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private Member member;

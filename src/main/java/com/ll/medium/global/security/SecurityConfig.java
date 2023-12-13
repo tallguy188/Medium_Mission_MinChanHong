@@ -28,9 +28,13 @@ public class SecurityConfig {
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-                .formLogin((formLogin) -> formLogin
+                .formLogin((formLogin) -> formLogin    // 시큐리티 로그인
                         .loginPage("/member/login")
-                        .defaultSuccessUrl("/"));
+                        .defaultSuccessUrl("/"))
+                .logout((logout) ->logout              // 시큐리티 로그아웃
+                        .logoutUrl("/member/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true));
         return http.build();
     }
 

@@ -68,7 +68,10 @@ public class PostService {
         myList.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page,10, Sort.by(myList));
         return postRepository.findAllByWriter(writer,pageable);
+    }
 
-
+    // 게시물 상세(추후 수정필요)
+    public Post getPostDetail(Integer id) {
+      return postRepository.getPostById(id).orElseThrow(() -> new PostNotFoundException(id));
     }
 }

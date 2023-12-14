@@ -79,5 +79,11 @@ public class PostController {
     }
 
 
+    @GetMapping("/{postId}")
+    public String postDetail(@PathVariable("postId") Integer id, Principal principal, Model model) {
+        Post detailPost = postService.getPostDetail(id);
+        model.addAttribute("post",detailPost);
 
+        return "post_detail";
+    }
 }

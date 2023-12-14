@@ -25,6 +25,15 @@ public class PostController {
     private final PostService postService;
     private final MemberService memberService;
 
+
+    @GetMapping("/list")
+    public String list(Model model, @RequestParam(value = "page",defaultValue = "0") int page) {
+
+        Page<Post> paging = postService.findList(page);
+        model.addAttribute("postList",paging);
+        return "post_list";
+    }
+
     @GetMapping("/write")
     public String createPost(PostForm postForm) {
         return "post_form";
@@ -33,18 +42,23 @@ public class PostController {
     @PostMapping("/write")
     public String createPost(@Valid PostForm postForm, BindingResult bindingResult, Principal principal) {
         if(bindingResult.hasErrors()) {
-            return "article_form";
+            return "post_form";
         }
-        // findMemberByUsername에서 이미 null을 잡아냄
-        Member optionalMember = memberService.findMemberByUsername(principal.getName());
-        postForm.setWriter(optionalMember);
+
+        try{
+            Member member = memberService.findMemberByUsername(principal.getName());
+            postForm.setWriter(member);
+        } catch (NullPointerException e){
+            postForm.setWriter(null);
+        }
         postService.create(postForm);
+
         return "redirect:/post/list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}/delete")
-    public String deletePost(@PathVariable("postId") Integer id,Principal principal, BindingResult bindingResult, PostForm postForm ){
+    public String deletePost(@PathVariable("postId") Long id,Principal principal, BindingResult bindingResult, PostForm postForm ){
 
         if(bindingResult.hasErrors()) {
             return "redirect:/post/"+id;
@@ -60,14 +74,6 @@ public class PostController {
         return "redirect:/post/list";
     }
 
-    @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page",defaultValue = "0") int page) {
-
-        Page<Post> paging = postService.findList(page);
-        model.addAttribute("postList",paging);
-        return "postList_form";
-    }
-
     @GetMapping("/myList")
     @PreAuthorize("isAuthenticated()")
     public String myList (Model model,Principal principal, @RequestParam(value="page", defaultValue="0") int page) {
@@ -80,7 +86,7 @@ public class PostController {
 
 
     @GetMapping("/{postId}")
-    public String postDetail(@PathVariable("postId") Integer id, Principal principal, Model model) {
+    public String postDetail(@PathVariable("postId") Long id, Principal principal, Model model) {
         Post detailPost = postService.getPostDetail(id);
         model.addAttribute("post",detailPost);
         return "post_detail";
@@ -89,7 +95,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{postId}/modify")
-    public String modify(@PathVariable("postId") Integer id,Principal principal, PostForm postForm, Model model){
+    public String modify(@PathVariable("postId") Long id,Principal principal, PostForm postForm, Model model){
         Post modiPost = postService.getPostById(id);
         // 로그인사용자와 게시물 작성자가 다를경우
 
@@ -108,7 +114,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{postId}/modify")
-    public String modifyPost(@PathVariable("postId") Integer id, BindingResult bindingResult, Principal principal,PostForm postForm) {
+    public String modifyPost(@PathVariable("postId") Long id, BindingResult bindingResult, Principal principal,PostForm postForm) {
         if(bindingResult.hasErrors()) {
             return "modify_form";
         }
@@ -116,7 +122,7 @@ public class PostController {
 
         postService.modify(modiPost, postForm);
 
-        return String.format("redirect:/post/%s",id);
+        return "redirect:/post/"+id;
     }
 
 

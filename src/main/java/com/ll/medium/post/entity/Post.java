@@ -4,9 +4,9 @@ package com.ll.medium.post.entity;
 import com.ll.medium.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,8 @@ public class Post {
     @Column
     private String content;
 
-    @Column
-    private boolean isPublished;
+    @Builder.Default
+    private boolean isPublished = true;
 
     @Column
     private LocalDateTime dateTime;

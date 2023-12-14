@@ -44,7 +44,7 @@ public class PostService {
     }
 
     // post id로 찾기
-    public Post getPostById(Integer id) {
+    public Post getPostById(Long id) {
           Optional<Post> post = postRepository.getPostById(id);
           if(post.isPresent()) {
               return post.get();
@@ -56,10 +56,8 @@ public class PostService {
 
     // 리스트 가져오기(isPublished)
     public Page<Post> findList(int page) {
-        List<Sort.Order> list = new ArrayList<>();
-        list.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page,10, Sort.by(list));
-        return postRepository.findAllByPublished(pageable,true);
+        Pageable pageable = PageRequest.of(page, 30);
+        return postRepository.findAllByIsPublished(pageable, true);
     }
 
     // username으로 페이지 가져오기
@@ -67,11 +65,11 @@ public class PostService {
         List<Sort.Order> myList = new ArrayList<>();
         myList.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page,10, Sort.by(myList));
-        return postRepository.findAllByWriter(writer,pageable);
+        return postRepository.findAllByMember(writer,pageable);
     }
 
     // 게시물 상세(추후 수정필요)
-    public Post getPostDetail(Integer id) {
+    public Post getPostDetail(Long id) {
       return postRepository.getPostById(id).orElseThrow(() -> new PostNotFoundException(id));
     }
 

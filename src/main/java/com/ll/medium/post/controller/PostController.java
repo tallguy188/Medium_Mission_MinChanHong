@@ -24,7 +24,7 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
-    // 글 작성
+
     @GetMapping("/write")
     public String createPost(PostForm postForm) {
         return "post_form";
@@ -43,7 +43,7 @@ public class PostController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{postId}/delete")
+    @DeleteMapping("/{postId}/delete")
     public String deletePost(@PathVariable("postId") Integer id,Principal principal, BindingResult bindingResult, PostForm postForm ){
 
         if(bindingResult.hasErrors()) {
@@ -52,7 +52,7 @@ public class PostController {
         Post post = postService.getPostById(id);
 
         if(!post.getMember().getUsername().equals(principal.getName())) {
-            // post 안되게
+            throw new RuntimeException("권한없음");
         }
 
         postService.deletePost(post);
@@ -83,7 +83,44 @@ public class PostController {
     public String postDetail(@PathVariable("postId") Integer id, Principal principal, Model model) {
         Post detailPost = postService.getPostDetail(id);
         model.addAttribute("post",detailPost);
-
         return "post_detail";
     }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{postId}/modify")
+    public String modify(@PathVariable("postId") Integer id,Principal principal, PostForm postForm, Model model){
+        Post modiPost = postService.getPostById(id);
+        // 로그인사용자와 게시물 작성자가 다를경우
+
+        if(!modiPost.getMember().getUsername().equals(principal.getName())) {
+            throw new RuntimeException("수정권한이 없습니다.");
+        }
+
+        postForm.setTitle(modiPost.getTitle());
+        postForm.setContent(modiPost.getContent());
+
+        model.addAttribute("postForm",postForm);
+        model.addAttribute("postId",id);
+
+        return "modify_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{postId}/modify")
+    public String modifyPost(@PathVariable("postId") Integer id, BindingResult bindingResult, Principal principal,PostForm postForm) {
+        if(bindingResult.hasErrors()) {
+            return "modify_form";
+        }
+        Post modiPost = postService.getPostById(id);
+
+        postService.modify(modiPost, postForm);
+
+        return String.format("redirect:/post/%s",id);
+    }
+
+
+
+
+
 }

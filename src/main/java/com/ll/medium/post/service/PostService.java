@@ -74,4 +74,17 @@ public class PostService {
     public Post getPostDetail(Integer id) {
       return postRepository.getPostById(id).orElseThrow(() -> new PostNotFoundException(id));
     }
+
+    // 게시물 수정
+    public void modify(Post post, PostForm postForm) {
+        post = post.toBuilder()
+                .title(postForm.getTitle())
+                .content(postForm.getContent())
+                .member(postForm.getWriter())
+                .isPublished(postForm.isPublished())
+                .dateTime(LocalDateTime.now())
+                .build();
+
+        postRepository.save(post);
+    }
 }

@@ -22,6 +22,4 @@ public class PostForm {
     private LocalDateTime dateTime = LocalDateTime.now();
 
     private boolean isPublished = true;
-
-
 }

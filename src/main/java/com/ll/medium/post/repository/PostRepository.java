@@ -7,16 +7,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
 
-    Optional<Post> getPostById(Integer id);
+    Optional<Post> getPostById(Long id);
 
     Page<Post> findAll(Pageable pageable);
 
-    Page<Post> findAllByPublished(Pageable pageable, Boolean bool);
+    Page<Post> findAllByIsPublished(Pageable pageable, Boolean bool);
 
-    Page<Post> findAllByWriter(Member writer, Pageable pageable);
+    Page<Post> findAllByMember(Member writer, Pageable pageable);
+
+    List<Post> findAllPostByMember(Member member);
 }

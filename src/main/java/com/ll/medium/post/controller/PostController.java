@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -57,12 +58,8 @@ public class PostController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{postId}/delete")
-    public String deletePost(@PathVariable("postId") Long id,Principal principal, BindingResult bindingResult, PostForm postForm ){
-
-        if(bindingResult.hasErrors()) {
-            return "redirect:/post/"+id;
-        }
+    @GetMapping("/{postId}/delete")
+    public String deletePost(@PathVariable("postId") Long id,Principal principal){
         Post post = postService.getPostById(id);
 
         if(!post.getMember().getUsername().equals(principal.getName())) {
@@ -81,7 +78,7 @@ public class PostController {
         Member writer = memberService.findMemberByUsername(principal.getName());
         Page<Post> post = postService.getPostByUsername(writer,page);
         model.addAttribute("postList",post);
-        return "myList_form";
+        return "myList";
     }
 
 
@@ -95,7 +92,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{postId}/modify")
-    public String modify(@PathVariable("postId") Long id,Principal principal, PostForm postForm, Model model){
+    public String modify(@PathVariable("postId") Long id,Principal principal, PostForm postForm){
         Post modiPost = postService.getPostById(id);
         // 로그인사용자와 게시물 작성자가 다를경우
 
@@ -106,23 +103,46 @@ public class PostController {
         postForm.setTitle(modiPost.getTitle());
         postForm.setContent(modiPost.getContent());
 
-        model.addAttribute("postForm",postForm);
-        model.addAttribute("postId",id);
-
-        return "modify_form";
+        return "post_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{postId}/modify")
-    public String modifyPost(@PathVariable("postId") Long id, BindingResult bindingResult, Principal principal,PostForm postForm) {
+    public String modifyPost(@PathVariable("postId") Long id, Principal principal,PostForm postForm,BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return "modify_form";
+            return "post_form";
         }
         Post modiPost = postService.getPostById(id);
 
         postService.modify(modiPost, postForm);
 
         return "redirect:/post/"+id;
+    }
+
+    @GetMapping("/b/{username}")
+    public String findPostByUsername(@PathVariable("username") String username, Model model) {
+        Member member = memberService.findMemberByUsername(username);
+        List<Post> posts = postService.findAllPostByMember(member);
+
+        if(posts.isEmpty()) {
+            return "redirect:/post/list";
+        }
+        model.addAttribute("postList",posts);
+
+        return "post_list";
+    }
+
+    @GetMapping("/b/{username}/{postId}")
+    public String findPostDetailByUsername(@PathVariable("username") String username, @PathVariable Integer postId,Model model){
+        Member member = memberService.findMemberByUsername(username);
+        List<Post> posts = postService.findAllPostByMember(member);
+
+        if(posts.isEmpty() || postId <=0 || postId > posts.size()) {
+            return "redirect:/post/list";
+        }
+
+        model.addAttribute("post",posts.get(postId-1));  //인덱스 0
+        return "post_detail";
     }
 
 

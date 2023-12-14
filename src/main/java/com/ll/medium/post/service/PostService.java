@@ -63,7 +63,7 @@ public class PostService {
     // username으로 페이지 가져오기
     public Page<Post> getPostByUsername(Member writer, int page) {
         List<Sort.Order> myList = new ArrayList<>();
-        myList.add(Sort.Order.desc("createDate"));
+        myList.add(Sort.Order.desc("dateTime"));
         Pageable pageable = PageRequest.of(page,10, Sort.by(myList));
         return postRepository.findAllByMember(writer,pageable);
     }
@@ -84,5 +84,9 @@ public class PostService {
                 .build();
 
         postRepository.save(post);
+    }
+
+    public List<Post> findAllPostByMember(Member member) {
+        return postRepository.findAllPostByMember(member);
     }
 }

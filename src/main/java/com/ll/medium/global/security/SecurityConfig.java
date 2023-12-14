@@ -30,9 +30,10 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin((formLogin) -> formLogin    // 시큐리티 로그인
                         .loginPage("/member/login")
-                        .defaultSuccessUrl("/"))
-                .logout((logout) ->logout              // 시큐리티 로그아웃
-                        .logoutUrl("/member/logout")
+                        .loginProcessingUrl("/user/login")
+                        .defaultSuccessUrl("/",false))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
         return http.build();
@@ -55,6 +56,18 @@ public class SecurityConfig {
         }
         return authentication.isAuthenticated();
     }
+
+
+//    @Bean
+//    public AuthenticationSuccessHandler successHandler() {
+//        return new SimpleUrlAuthenticationSuccessHandler("/") {
+//            @Override
+//            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                super.onAuthenticationSuccess(request, response, authentication);
+//                clearAuthenticationAttributes(request);
+//            }
+//        };
+//    }
 
 
 }

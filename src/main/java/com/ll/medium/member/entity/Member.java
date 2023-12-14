@@ -19,6 +19,7 @@ public class Member {
     @Column(name="user_id", nullable = false)
     Long id;
 
+
     @Column(unique = true)
     String username;
 

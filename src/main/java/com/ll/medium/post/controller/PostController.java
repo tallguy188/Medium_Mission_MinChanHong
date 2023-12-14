@@ -8,13 +8,12 @@ import com.ll.medium.post.entity.PostForm;
 import com.ll.medium.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -60,5 +59,25 @@ public class PostController {
 
         return "redirect:/post/list";
     }
+
+    @GetMapping("/list")
+    public String list(Model model, @RequestParam(value = "page",defaultValue = "0") int page) {
+
+        Page<Post> paging = postService.findList(page);
+        model.addAttribute("postList",paging);
+        return "postList_form";
+    }
+
+    @GetMapping("/myList")
+    @PreAuthorize("isAuthenticated()")
+    public String myList (Model model,Principal principal, @RequestParam(value="page", defaultValue="0") int page) {
+
+        Member writer = memberService.findMemberByUsername(principal.getName());
+        Page<Post> post = postService.getPostByUsername(writer,page);
+        model.addAttribute("postList",post);
+        return "myList_form";
+    }
+
+
 
 }

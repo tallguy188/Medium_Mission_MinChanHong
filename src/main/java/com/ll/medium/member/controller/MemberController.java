@@ -6,6 +6,7 @@ import com.ll.medium.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +20,20 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
     @GetMapping("/login")
     public String login() {
         return "login_form";
     }
 
+
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String join(MemberForm memberForm) {
         return "join_form";
     }
 
+
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String join(@Valid MemberForm memberForm, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {

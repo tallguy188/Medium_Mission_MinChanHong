@@ -8,14 +8,22 @@ import com.ll.medium.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional
     public void joinMember(MemberForm memberForm) {
+
+        findMemberByUsername(memberForm.getUsername());
         Member member = memberRepository.save(
                 Member.builder()
                         .username(memberForm.getUsername())
@@ -24,7 +32,16 @@ public class MemberService {
     }
 
     public Member findMemberByUsername(String username) {
-        return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new MemberNotFoundException("Member not found"));
+        Optional<Member> member = memberRepository.findByUsername(username);
+        if (member.isPresent()) {
+            return member.get();
+        }
+        else {
+            throw new MemberNotFoundException("존재하지 않는 회원입니다.");
+        }
+    }
+
+    public long count() {
+        return memberRepository.count();
     }
 }

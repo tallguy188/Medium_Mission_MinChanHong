@@ -22,4 +22,13 @@ public class PostForm {
     private LocalDateTime dateTime = LocalDateTime.now();
 
     private boolean isPublished = true;
+
+    public static PostForm generate(String title, String content, Member writer, boolean isPublished) {
+        PostForm postForm  = new PostForm();
+        postForm.setTitle(title);
+        postForm.setContent(content);
+        postForm.setWriter(writer);
+        postForm.setPublished(isPublished);
+        return postForm;
+    }
 }

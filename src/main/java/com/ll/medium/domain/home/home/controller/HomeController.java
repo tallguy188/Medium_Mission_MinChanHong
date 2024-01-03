@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
     @GetMapping("/")
-    public String showMain() {
-        return "domain/home/home/main";
+    public String home(){
+        return "redirect:/post/list";
     }
 }

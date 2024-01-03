@@ -20,6 +20,8 @@ public class MemberForm {
     @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
     private String passwordConfirm;
 
+    private boolean isPaid;
+
     public static MemberForm generate(String username, String password, String passwordConfirm) {
         MemberForm memberForm = new MemberForm();
         memberForm.setUsername(username);

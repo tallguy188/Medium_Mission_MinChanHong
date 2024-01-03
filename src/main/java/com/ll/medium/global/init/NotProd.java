@@ -51,6 +51,7 @@ public class NotProd {
                 MemberForm memberCreateForm = new MemberForm();
                 memberCreateForm.setUsername("user" + i);
                 memberCreateForm.setPassword("1234");
+                memberCreateForm.setPasswordConfirm("1234");
                 memberService.joinMember(memberCreateForm);
 
                 PostForm postForm = new PostForm();
@@ -59,6 +60,23 @@ public class NotProd {
                 postForm.setWriter(memberService.findMemberByUsername("user" + i));
                 postService.create(postForm);
             }
+
+            for (int i = 31; i < 132; i++) {
+                MemberForm memberPaidForm = new MemberForm();
+                memberPaidForm.setUsername("user"+i);
+                memberPaidForm.setPassword("1234");
+                memberPaidForm.setPasswordConfirm("1234");
+                memberPaidForm.setPaid(true);
+                memberService.joinMember(memberPaidForm);
+
+                PostForm postPaidForm= new PostForm();
+                postPaidForm.setTitle("title"+i);
+                postPaidForm.setContent("title"+i);
+                postPaidForm.setWriter(memberService.findMemberByUsername("user" +i));
+                postPaidForm.setPaid(true);
+                postService.create(postPaidForm);
+            }
+
 
         };
 

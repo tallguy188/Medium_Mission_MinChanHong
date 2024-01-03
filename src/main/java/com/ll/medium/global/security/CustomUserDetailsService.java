@@ -39,6 +39,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (List.of("system","admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if (member.isPaid()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PAID"));
         }
 
         return new User(

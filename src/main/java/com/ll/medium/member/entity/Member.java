@@ -39,4 +39,8 @@ public class Member {
 
     @LastModifiedDate
     private LocalDateTime modifyDate;
+
+
+    @Builder.Default
+    private boolean isPaid = false;
 }

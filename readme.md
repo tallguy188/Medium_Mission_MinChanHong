@@ -16,6 +16,6 @@
 
 # ToDo 3
 
-- [ ] Member클래스에 isPaid 추가
-- [ ] Post 클래스에 isPaid 추가 
+- [x] Member클래스에 isPaid 추가
+- [x] Post 클래스에 isPaid 추가 
 - [ ] NotProd에서 유료멤버쉽 회원, 유료글 각각 샘플 100개 이상 생성 

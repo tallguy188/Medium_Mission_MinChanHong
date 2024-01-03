@@ -19,6 +19,11 @@
             <input type="checkbox" id="isPublished" name="isPublished" th:checked="${postForm.isPublished}"/>
         </div>
 
+        <div class="mb-3">
+            <label for="isPaid" class="form-label">유료화 설정</label>
+            <input type="checkbox" id="isPaid" name="isPaid" th:checked="${postForm.isPaid}"/>
+        </div>
+
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>
 </div>

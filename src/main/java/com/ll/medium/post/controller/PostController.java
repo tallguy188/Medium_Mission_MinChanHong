@@ -49,6 +49,8 @@ public class PostController {
         try{
             Member member = memberService.findMemberByUsername(principal.getName());
             postForm.setWriter(member);
+            postForm.setPublished(postForm.isPublished());
+            postForm.setPaid(postForm.isPaid());
         } catch (NullPointerException e){
             postForm.setWriter(null);
         }
@@ -84,7 +86,9 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public String postDetail(@PathVariable("postId") Long id, Principal principal, Model model) {
-        Post detailPost = postService.getPostDetail(id);
+
+        Member member = memberService.findMemberByUsername(principal.getName());
+        Post detailPost = postService.getPostDetail(member, id);
         model.addAttribute("post",detailPost);
         return "post_detail";
     }

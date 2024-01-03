@@ -23,6 +23,8 @@ public class PostForm {
 
     private boolean isPublished = true;
 
+    private boolean isPaid = false;
+
     public static PostForm generate(String title, String content, Member writer, boolean isPublished) {
         PostForm postForm  = new PostForm();
         postForm.setTitle(title);

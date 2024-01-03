@@ -39,4 +39,7 @@ public class Post {
     @JoinColumn(name="user_id")
     private Member member;
 
+    @Builder.Default
+    private boolean isPaid = false;
+
 }

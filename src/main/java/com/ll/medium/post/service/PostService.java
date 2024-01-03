@@ -28,12 +28,13 @@ public class PostService {
 
     // post 생성
     public void create(PostForm postForm) {
-        Post post = postRepository.save(Post.builder()
+        postRepository.save(Post.builder()
                         .title(postForm.getTitle())
                         .content(postForm.getContent())
                         .member(postForm.getWriter())
                         .isPublished(postForm.isPublished())
                         .dateTime(LocalDateTime.now())
+                        .isPaid(postForm.isPaid())
                 .build());
     }
 
@@ -68,9 +69,13 @@ public class PostService {
         return postRepository.findAllByMember(writer,pageable);
     }
 
-    // 게시물 상세(추후 수정필요)
-    public Post getPostDetail(Long id) {
-      return postRepository.getPostById(id).orElseThrow(() -> new PostNotFoundException(id));
+    // 유료회원 로직 추가
+    public Post getPostDetail(Member member,Long id) {
+      Post post = postRepository.getPostById(id).orElseThrow(() -> new PostNotFoundException(id));
+        if(post.isPaid() && !member.isPaid()) {
+            return post.toBuilder().content("이 글은 회원 전용입니다.").build();
+        }
+        return post;
     }
 
     // 게시물 수정
@@ -89,4 +94,5 @@ public class PostService {
     public List<Post> findAllPostByMember(Member member) {
         return postRepository.findAllPostByMember(member);
     }
+
 }

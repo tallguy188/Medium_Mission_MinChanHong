@@ -60,27 +60,30 @@ public class NotProd {
                 postForm.setWriter(memberService.findMemberByUsername("user" + i));
                 postService.create(postForm);
             }
-
-            for (int i = 31; i < 132; i++) {
-                MemberForm memberPaidForm = new MemberForm();
-                memberPaidForm.setUsername("user"+i);
-                memberPaidForm.setPassword("1234");
-                memberPaidForm.setPasswordConfirm("1234");
-                memberPaidForm.setPaid(true);
-                memberService.joinMember(memberPaidForm);
-
-                PostForm postPaidForm= new PostForm();
-                postPaidForm.setTitle("title"+i);
-                postPaidForm.setContent("title"+i);
-                postPaidForm.setWriter(memberService.findMemberByUsername("user" +i));
-                postPaidForm.setPaid(true);
-                postService.create(postPaidForm);
-            }
-
-
+            createPaidMembers();
+            createPaidPosts();
         };
-
-
     }
 
+    private void createPaidMembers() {
+        for (int i=0; i<=100; i++) {
+            MemberForm memberPaidForm = new MemberForm();
+            memberPaidForm.setUsername("paid_user"+i);
+            memberPaidForm.setPassword("1234");
+            memberPaidForm.setPasswordConfirm("1234");
+            memberPaidForm.setPaid(true);
+            memberService.joinMember(memberPaidForm);
+        }
+    }
+
+    private void createPaidPosts() {
+        for(int i=0; i<=100; i++) {
+            PostForm postPaidForm= new PostForm();
+            postPaidForm.setTitle("Paid post"+i);
+            postPaidForm.setContent("Content for Paid Post"+i);
+            postPaidForm.setWriter(memberService.findMemberByUsername("paid_user" +i));
+            postPaidForm.setPaid(true);
+            postService.create(postPaidForm);
+        }
+    }
 }
